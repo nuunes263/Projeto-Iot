@@ -1,0 +1,402 @@
+[
+    {
+        "id": "9c6fbb83e5474091",
+        "type": "tab",
+        "label": "Fluxo 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "0a23afe4a44192c9",
+        "type": "mqtt in",
+        "z": "9c6fbb83e5474091",
+        "name": "ambiente",
+        "topic": "temperatura/ambiente",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "ff1f10d201688806",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 520,
+        "y": 160,
+        "wires": [
+            [
+                "e6e1536f9bc9ccb8",
+                "7a9a53b810c67dce"
+            ]
+        ]
+    },
+    {
+        "id": "efc404b81399247e",
+        "type": "mqtt out",
+        "z": "9c6fbb83e5474091",
+        "name": "",
+        "topic": "temperatura/ar-condicionado",
+        "qos": "1",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "ff1f10d201688806",
+        "x": 1140,
+        "y": 680,
+        "wires": []
+    },
+    {
+        "id": "98e8b5865fa60296",
+        "type": "function",
+        "z": "9c6fbb83e5474091",
+        "name": "Conteúdo da mensagem",
+        "func": "\nmsg.payload = {\n    \"chatId\" : 5001729689,\n    \"type\" : \"message\",\n    \"content\": \"A Temperatura foi alterada para \" + msg.payload + \"°C com sucesso !! Digite /start para alterar a temperatura novamente.\"\n}\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1130,
+        "y": 600,
+        "wires": [
+            [
+                "1b77878026a69c27"
+            ]
+        ]
+    },
+    {
+        "id": "1b77878026a69c27",
+        "type": "telegram sender",
+        "z": "9c6fbb83e5474091",
+        "name": "SUCESSO",
+        "bot": "4aaf903624e07928",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 1390,
+        "y": 600,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "6fd041b46bf4ac26",
+        "type": "function",
+        "z": "9c6fbb83e5474091",
+        "name": "Separa valor temperatura",
+        "func": "var temperatura = Number(msg.payload);\nmsg.payload = temperatura;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 830,
+        "y": 640,
+        "wires": [
+            [
+                "98e8b5865fa60296",
+                "efc404b81399247e",
+                "37c3213618ff4105"
+            ]
+        ]
+    },
+    {
+        "id": "efecb0a87e31a9e9",
+        "type": "telegram command",
+        "z": "9c6fbb83e5474091",
+        "name": "",
+        "command": "/start",
+        "description": "",
+        "registercommand": false,
+        "language": "",
+        "scope": "default",
+        "bot": "4aaf903624e07928",
+        "strict": false,
+        "hasresponse": true,
+        "useregex": false,
+        "removeregexcommand": false,
+        "outputs": 2,
+        "x": 90,
+        "y": 500,
+        "wires": [
+            [
+                "11a5bd44719f9add"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "11a5bd44719f9add",
+        "type": "function",
+        "z": "9c6fbb83e5474091",
+        "name": "Conteúdo da mensagem",
+        "func": "msg.payload = {\n    \"chatId\": 5001729689,\n    \"type\": \"message\",\n    \"content\": \"Olá! Qual temperatura desejada para o ar-condicionado ??\"\n};\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 290,
+        "y": 500,
+        "wires": [
+            [
+                "7289239ad1443886"
+            ]
+        ]
+    },
+    {
+        "id": "7289239ad1443886",
+        "type": "telegram sender",
+        "z": "9c6fbb83e5474091",
+        "name": "MENU",
+        "bot": "4aaf903624e07928",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 490,
+        "y": 500,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a2b70b06066afdd7",
+        "type": "telegram receiver",
+        "z": "9c6fbb83e5474091",
+        "name": "USUÁRIO",
+        "bot": "4aaf903624e07928",
+        "saveDataDir": "",
+        "filterCommands": false,
+        "x": 400,
+        "y": 860,
+        "wires": [
+            [
+                "4ecd12c7ca5a1d25"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "4ecd12c7ca5a1d25",
+        "type": "function",
+        "z": "9c6fbb83e5474091",
+        "name": "function 6",
+        "func": "var test = msg.payload;\nvar tag1 = test.content;\nmsg.payload = tag1;\n\nif(tag1 == \"/start\"){\n    return msg.payload = \"\";\n}\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 600,
+        "y": 860,
+        "wires": [
+            [
+                "6fd041b46bf4ac26",
+                "8363eefcbba2b1e0"
+            ]
+        ]
+    },
+    {
+        "id": "8363eefcbba2b1e0",
+        "type": "debug",
+        "z": "9c6fbb83e5474091",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 760,
+        "y": 900,
+        "wires": []
+    },
+    {
+        "id": "37c3213618ff4105",
+        "type": "influxdb out",
+        "z": "9c6fbb83e5474091",
+        "influxdb": "b78cf34ee4235afe",
+        "name": "InfluxDB",
+        "measurement": "temperatura_ar_condicionado",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "projeto-iot",
+        "bucket": "projeto-iot",
+        "x": 1100,
+        "y": 780,
+        "wires": []
+    },
+    {
+        "id": "e6e1536f9bc9ccb8",
+        "type": "influxdb out",
+        "z": "9c6fbb83e5474091",
+        "influxdb": "b78cf34ee4235afe",
+        "name": "InfluxDB",
+        "measurement": "temperatura_ambiente",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "projeto-iot",
+        "bucket": "projeto-iot",
+        "x": 680,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "55211e2d8b0a8404",
+        "type": "mqtt in",
+        "z": "9c6fbb83e5474091",
+        "name": "ar-condicionado",
+        "topic": "temperatura/ar-condicionado",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "ff1f10d201688806",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 540,
+        "y": 240,
+        "wires": [
+            [
+                "4f30af397904cff7"
+            ]
+        ]
+    },
+    {
+        "id": "4f30af397904cff7",
+        "type": "influxdb out",
+        "z": "9c6fbb83e5474091",
+        "influxdb": "b78cf34ee4235afe",
+        "name": "InfluxDB",
+        "measurement": "temperatura_ar_condicionado",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "projeto-iot",
+        "bucket": "projeto-iot",
+        "x": 720,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "e442d82bc0388b28",
+        "type": "telegram sender",
+        "z": "9c6fbb83e5474091",
+        "name": "AVISO",
+        "bot": "4aaf903624e07928",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 830,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "7a9a53b810c67dce",
+        "type": "function",
+        "z": "9c6fbb83e5474091",
+        "name": "function 7",
+        "func": "if (msg.payload <= 18){\n    msg.payload = {\n        \"chatId\": 5001729689,\n        \"type\": \"message\",\n        \"content\": \"A temperatura ambiente se encontra em 18°C, ar-condicionado será desligado !!\"\n    }\n    return msg;\n}\n\nmsg.payload = \"\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 680,
+        "y": 80,
+        "wires": [
+            [
+                "e442d82bc0388b28"
+            ]
+        ]
+    },
+    {
+        "id": "ff1f10d201688806",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "mqtt://broker.hivemq.com",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "4aaf903624e07928",
+        "type": "telegram bot",
+        "botname": "project_iot_air_condicional_bot",
+        "usernames": "",
+        "chatids": "",
+        "baseapiurl": "",
+        "testenvironment": false,
+        "updatemode": "polling",
+        "addressfamily": "",
+        "pollinterval": "300",
+        "usesocks": false,
+        "sockshost": "",
+        "socksprotocol": "socks5",
+        "socksport": "6667",
+        "socksusername": "anonymous",
+        "sockspassword": "",
+        "bothost": "",
+        "botpath": "",
+        "localbotport": "8443",
+        "publicbotport": "8443",
+        "privatekey": "",
+        "certificate": "",
+        "useselfsignedcertificate": false,
+        "sslterminated": false,
+        "verboselogging": false
+    },
+    {
+        "id": "b78cf34ee4235afe",
+        "type": "influxdb",
+        "hostname": "127.0.0.1",
+        "port": "8086",
+        "protocol": "http",
+        "database": "database",
+        "name": "projeto-iot",
+        "usetls": false,
+        "tls": "",
+        "influxdbVersion": "2.0",
+        "url": "https://us-east-1-1.aws.cloud2.influxdata.com",
+        "timeout": "10",
+        "rejectUnauthorized": true
+    }
+]

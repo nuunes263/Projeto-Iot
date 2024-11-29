@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "author": "Wallace Santana",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "wokwi-esp32-devkit-v1", "id": "esp", "top": 0, "left": 0, "attrs": {} },
+    { "type": "wokwi-dht22", "id": "dht1", "top": 9.9, "left": 177, "attrs": {} },
+    { "type": "wokwi-dht22", "id": "dht2", "top": -114.9, "left": -120.6, "attrs": {} }
+  ],
+  "connections": [
+    [ "esp:TX0", "$serialMonitor:RX", "", [] ],
+    [ "esp:RX0", "$serialMonitor:TX", "", [] ],
+    [ "dht1:VCC", "esp:3V3", "red", [ "v0" ] ],
+    [ "dht1:GND", "esp:GND.1", "black", [ "v0" ] ],
+    [ "dht1:SDA", "esp:D15", "green", [ "v0" ] ],
+    [ "dht2:VCC", "esp:3V3", "red", [ "v0" ] ],
+    [ "dht2:GND", "esp:GND.2", "black", [ "v0" ] ],
+    [ "dht2:SDA", "esp:D23", "green", [ "v0" ] ]
+  ],
+  "dependencies": {}
+}
